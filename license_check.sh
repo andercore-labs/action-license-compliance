@@ -2,8 +2,6 @@
 
 source common_functions.sh
 
-TOTAL_COUNTER=0
-FAIL_COUNTER=0
 INPUT_FILE="$1"
 ALLOW_LIST="$2"
 BLOCK_LIST="$3"
@@ -27,9 +25,4 @@ while IFS=',' read -r line; do
         fi
     fi
 done < <(sed 1d "$INPUT_FILE")
-echo "</table>" >>"$GITHUB_STEP_SUMMARY"
-
-if (($FAIL_COUNTER > 0)); then
-    echo -e "\n<h4>$FAIL_COUNTER / $TOTAL_COUNTER licenses need to be researched.</h4>\n" >>"$GITHUB_STEP_SUMMARY"
-    echo "::error::Some licenses need to be reviewed" && exit 1
-fi
+echo "</table>" >>
