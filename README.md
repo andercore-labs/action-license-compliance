@@ -5,51 +5,37 @@ This GitHub Action checks the licenses of Python dependencies and sends notifica
 ## Inputs
 
 slack_webhook_url (required): Slack webhook URL for sending notifications.
-allow_list (optional): A regex pattern for allowed licenses. Default: '(MIT|BSD|ISC|Apache|CC0|buyer-app)'.
+allow_list (optional): A regex pattern for allowed licenses. Default: '(MIT|BSD|ISC|Apache|CC0)'.
+allow_list (optional): A regex pattern for blocked licenses. Default: '(GPL|AGPL|CDDL|EUPL|LGPL|MPL)'.
 
 ## Example Usage
 
 ```yaml
-name: 'Arazutech: Python License Check'
-description: 'Checks the licenses of Python dependencies and sends notifications if restricted licenses are found'
-inputs:
-  slack_webhook_url:
-    description: 'Slack webhook URL for sending notifications'
-    required: true
-  allow_list:
-    description: 'Regex pattern for allowed licenses'
-    default: '(MIT|BSD|ISC|Apache|CC0|buyer-app)'
-runs:
-  using: 'composite'
-  steps:
+name: Dependency License Check
 
-    - name: 'Check for restricted licenses'
-      run: |
-        chmod +x ${{ github.action_path }}/license_check.sh
-        ${{ github.action_path }}/license_check.sh licenses.csv "${{ inputs.allow_list }}"
-      shell: bash
+on:
+  push:
+    branches: [ main ]
+  pull_request:
 
-    - name: 'Show all license info'
-      run: |
-        chmod +x ${{ github.action_path }}/show_license.sh
-        ${{ github.action_path }}/show_license.sh licenses.csv
-      shell: bash
-      if: always()
+jobs:
+  license-compliance-check:
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      ALLOW_LIST: {{ vars.LICENSE_ALLOW_LIST }}
+      BLOCK_LIST: {{ vars.LICENSE_BLOCK_LIST }}
+    steps:            
+      - name: Node License Check
+        uses: arazutech/action-license-compliance@v50
+        with:
+          slack_webhook_url: ${{ env.SLACK_WEBHOOK_URL }}
+          allow_list: ${{ env.ALLOW_LIST }}
+          block_list: ${{ env.BLOCK_LIST }}
+          runtime: "node"
+        if: always()
 
-    - name: 'Format output to JSON'
-      run: |
-        chmod +x ${{ github.action_path }}/create_json.sh
-        ${{ github.action_path }}/create_json.sh invalid.csv
-      shell: bash
-      if: always()
 
-    - name: 'POST JSON'
-      run: |
-        json_data=$(cat slack_message.json)
-        escaped_json_data=$(echo "$json_data" | jq -c .)
-        curl -X POST -H 'Content-type: application/json' --data "$escaped_json_data" ${{ inputs.slack_webhook_url }}
-      shell: bash
-      if: always()
 ```
 
 ## License
