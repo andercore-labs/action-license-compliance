@@ -1,4 +1,4 @@
-# Arazutech: Python License Check GitHub Action
+# Arazutech: License Checker
 
 This GitHub Action checks the licenses of Python dependencies and sends notifications if restricted licenses are found. It can be configured to use a Slack webhook to send notifications.
 
