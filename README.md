@@ -32,7 +32,7 @@ jobs:
       - name: Node License Check
         uses: arazutech/action-license-compliance@v50
         with:
-          runtime: {{ env.RUNTIME }}
+          runtime: ${{ env.RUNTIME }}
           slack_webhook_url: ${{ env.SLACK_WEBHOOK_URL }}
           allow_list: ${{ env.ALLOW_LIST }}
           block_list: ${{ env.BLOCK_LIST }}
