@@ -4,9 +4,9 @@ This GitHub Action checks the licenses of Python dependencies and sends notifica
 
 ## Inputs
 
-slack_webhook_url (required): Slack webhook URL for sending notifications.
-allow_list (optional): A regex pattern for allowed licenses. Default: '(MIT|BSD|ISC|Apache|CC0)'.
-allow_list (optional): A regex pattern for blocked licenses. Default: '(GPL|AGPL|CDDL|EUPL|LGPL|MPL)'.
+slack_webhook_url (required): Slack webhook URL for sending notifications.\
+allow_list (optional): A regex pattern for allowed licenses. Default: '(MIT|BSD|ISC|Apache|CC0)'.\
+allow_list (optional): A regex pattern for blocked licenses. Default: '(GPL|AGPL|CDDL|EUPL|LGPL|MPL)'.\
 
 ## Example Usage
 
